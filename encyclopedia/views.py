@@ -9,7 +9,11 @@ def index(request):
     })
 
 def wiki(request, title):
+    entry = util.get_entry(title)
+    
+    if entry == None:
+        return render(request, "encyclopedia/error.html")
     return render(request, "encyclopedia/wiki.html", {
         "title": title,
-        "entry": util.get_entry(title)
+        "entry": entry
     })
