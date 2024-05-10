@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from . import util
+from random import choice
 
 
 def index(request):    
@@ -34,3 +35,13 @@ def wiki(request, title):
         "title": title,
         "entry": entry
     })
+    
+def random(request):
+    entries = util.list_entries()
+    print(entries)
+    entry = choice(entries)
+    print(entry)
+    return HttpResponseRedirect(f"wiki/{entry}")
+    
+    
+    
