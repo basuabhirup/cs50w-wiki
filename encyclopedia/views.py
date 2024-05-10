@@ -45,12 +45,16 @@ def create(request):
     
         if not title or not content:
             return render(request, "encyclopedia/create.html", {
-            "error": "Please fill out both title and content fields."
+                "title": title,
+                "content": content,
+                "error": "Please fill out both title and content fields."
             })
         
         if util.get_entry(title):
             return render(request, "encyclopedia/create.html", {
-            "error": "An encyclopedia entry with that title already exists."
+                "title": title,
+                "content": content,
+                "error": "An encyclopedia entry with that title already exists."
             })
         
         util.save_entry(title, content)
@@ -68,8 +72,8 @@ def edit(request, title):
     
         if not content:
             return render(request, "encyclopedia/edit.html", {
-            "title": title,
-            "error": "Please fill out the content field."
+                "title": title,
+                "error": "Please fill out the content field."
             })
         
         util.save_entry(title, content)
