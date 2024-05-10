@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from . import util
 from random import choice
+from markdown2 import markdown
 
 
 def index(request):    
@@ -33,7 +34,7 @@ def wiki(request, title):
         return render(request, "encyclopedia/error.html")
     return render(request, "encyclopedia/wiki.html", {
         "title": title,
-        "entry": entry
+        "entry": markdown(entry)
     })
     
 def random(request):
