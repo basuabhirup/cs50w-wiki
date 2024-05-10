@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from django.urls import reverse
 from . import util
 from random import choice
 from markdown2 import markdown
@@ -54,10 +55,32 @@ def create(request):
         
         util.save_entry(title, content)
         
-        return HttpResponseRedirect(f"wiki/{title}")
+        return HttpResponseRedirect(reverse("wiki", args=[title]))
     
     else:
         return render(request, "encyclopedia/create.html")
+    
+def edit(request, title):
+    entry = util.get_entry(title)
+    
+    if request.method == "POST":
+        content = request.POST["content"]
+    
+        if not content:
+            return render(request, "encyclopedia/edit.html", {
+            "title": title,
+            "error": "Please fill out the content field."
+            })
+        
+        util.save_entry(title, content)
+        
+        return HttpResponseRedirect(reverse("wiki", args=[title]))
+    
+    else:
+        return render(request, "encyclopedia/edit.html", {
+            "title": title,
+            "content": entry
+        })
     
 def random(request):
     entries = util.list_entries()
