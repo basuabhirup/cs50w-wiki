@@ -37,6 +37,28 @@ def wiki(request, title):
         "entry": markdown(entry)
     })
     
+def create(request):
+    if request.method == "POST":
+        title = request.POST["title"]
+        content = request.POST["content"]
+    
+        if not title or not content:
+            return render(request, "encyclopedia/create.html", {
+            "error": "Please fill out both title and content fields."
+            })
+        
+        if util.get_entry(title):
+            return render(request, "encyclopedia/create.html", {
+            "error": "An encyclopedia entry with that title already exists."
+            })
+        
+        util.save_entry(title, content)
+        
+        return HttpResponseRedirect(f"wiki/{title}")
+    
+    else:
+        return render(request, "encyclopedia/create.html")
+    
 def random(request):
     entries = util.list_entries()
     print(entries)
